@@ -5,11 +5,11 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware('guest:admin')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])->name('admin.register');
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::get('admin.register', [RegisteredUserController::class, 'create'])->name('admin.register');
+    Route::post('admin.register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [LoginController::class, 'create'])->name('admin.login');
-    Route::post('login', [LoginController::class, 'store']);
+    Route::get('admin.login', [LoginController::class, 'create'])->name('admin.login');
+    Route::post('admin.login', [LoginController::class, 'store']);
 
 });
 

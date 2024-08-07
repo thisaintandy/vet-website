@@ -3,6 +3,8 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <h4 class="text-center mb-3">Admin Login Page<h4>
+    <h4 class="text-center mb-3"><a href="{{ route('admin.register') }}">Register</a></h4>
+
     <form method="POST" action="{{ route('admin.login') }}">
         @csrf
         <!-- Email Address -->

@@ -26,31 +26,33 @@
         @endif
     </div>
 
-    <div class="container mx-auto mt-0">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Filter Form -->
         <form action="{{ route('admin.index') }}" method="GET" class="mb-6">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                 <div class="flex flex-col md:flex-row md:space-x-4">
                     <!-- Date Input -->
-                    <input type="date" name="date" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/3 h-12" value="{{ request('date') }}" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                    <input type="date" name="date" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/4 h-12" value="{{ request('date') }}" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
 
                     <!-- Pet Name Input -->
-                    <input type="text" name="pet_name" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/3 h-12" value="{{ request('pet_name') }}" placeholder="Search Pet">
+                    <input type="text" name="pet_name" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/4 h-12" value="{{ request('pet_name') }}" placeholder="Search Pet">
 
                     <!-- Status Select -->
-                    <select name="status" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/3 h-12">
+                    <select name="status" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/4 h-12">
                         <option value="">All Statuses</option>
                         <option value="Approved" {{ request('status') == 'Approved' ? 'selected' : '' }}>Approved</option>
                         <option value="Denied" {{ request('status') == 'Denied' ? 'selected' : '' }}>Denied</option>
                         <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
                     </select>
+                    <button type="submit" class="border text-white bg-gray-500 p-2 rounded mt-2 md:mt-0 w-full md:w-1/4 h-12">Filter</button>
                 </div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 md:mt-0 h-12">Filter</button>
+
             </div>
         </form>
 
+
         @if (count($appointments) > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="flex flex-wrap -mx-10">
                 @foreach ($appointments as $item)
                     @php
                         $bgColor = match($item->status) {
@@ -61,26 +63,37 @@
                         };
                     @endphp
 
-                    <div class="border border-blue-700 p-4 rounded-lg {{ $bgColor }} flex flex-col">
-                        <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
-                        <p>Appointment Type: {{ $item->appointment_type }}</p>
-                        <p>Pet Name: {{ $item->pet_name }}</p>
-                        <p>Description: {{ $item->description }}</p>
-                        <p>Date: {{ $item->appointment_date }}</p>
-                        <p>Status: <b>{{ $item->status }}</b></p>
-                        <div class="mt-auto flex flex-col space-y-2">
-                            <a href="{{ route('admin.edit', ['id' => $item->appointment_id]) }}" class="bg-yellow-500 text-white px-4 py-2 rounded text-center">View +</a>
-                            <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
-                                @csrf
-                            </form>
+                    <div class="w-full md:w-1/2 xl:w-1/2 p-4">
+                        <div class="border mb-3 rounded-lg">
+                            <div class="border p-4 mb-3 rounded-lg flex justify-between items-center {{ $bgColor }}">
+                                <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
+                                <p>Date: {{ $item->appointment_date }}</p>
+                            </div>
+                            <div class="p-4 mb-3 rounded-lg flex justify-between items-center">
+                                <div>
+                                    <p>Status: <b>{{ $item->status }}</b></p>
+                                    <p>Appointment Type: {{ $item->appointment_type }}</p>
+                                    <p>Pet Name: {{ $item->pet_name }}</p>
+                                </div>
+
+                                <div class="flex flex-col space-y-2">
+                                    <a href="{{ route('admin.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded text-center">View +</a>
+                                    <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 @endforeach
-            </div>
+
+    </div>
         @else
             <div>
                 <p>No appointments!</p>
             </div>
         @endif
     </div>
+
 @endsection

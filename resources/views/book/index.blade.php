@@ -11,7 +11,7 @@
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 bg-cover bg-center" style="background-image: url('/images/petdoctor.jpg'); height: 100px">
+                <div class="p-6 text-gray-900 bg-cover bg-center" style="background-image: url('/images/header-background.jpg'); height: 100px">
                     <h4 class="text-white"></h4>
                     <br>
                 </div>
@@ -20,7 +20,12 @@
     </div>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+
+        <div class="mb-4 mt-3">
+            <a href="{{ route('book.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded">View Appointments History</a>
+        </div>
+
+        <div class="bg-gray-100 shadow-md rounded-lg p-6 mb-10">
             <form method="POST" action="{{ route('appointments.store') }}">
                 @csrf
                 @method('POST')
@@ -47,12 +52,12 @@
                     <textarea class="w-full p-2 border border-gray-300 rounded-lg" id="exampleFormControlTextarea1" name="description" rows="3" placeholder="What is the appointment for?"></textarea>
                 </div>
                 <div>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Submit Request</button>
+                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit Request</button>
                 </div>
             </form>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-gray-100 shadow-md rounded-lg p-6">
             <h2 class="text-lg font-bold mb-4">How to Set a Veterinarian Appointment</h2>
             <ol class="list-decimal list-inside mb-4">
                 <li class="mb-2"><strong>Visit the Appointment Booking Form:</strong> Navigate to the appointment booking page on our website.</li>

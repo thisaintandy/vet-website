@@ -15,7 +15,6 @@ class AdminAppointmentController extends Controller
     public function index(Request $request)
     {
         // Retrieve all appointments or relevant data for listing
-
         $query = Appointments::query();
 
         // Apply filters
@@ -73,7 +72,7 @@ class AdminAppointmentController extends Controller
 
     // Method for handling form submission
     public function store(Request $request)
-{
+    {
     // Validate the request
     $validatedData = $request->validate([
         'pet_name' => 'required|string|max:255',
@@ -128,7 +127,6 @@ public function show($id)
         $userID = $appointment->user_id;
         $user = User::where('id', $userID)->first();
 
-            // Debug output
         //dd($user);
 
         // Pass the appointment data to the view
@@ -144,7 +142,7 @@ public function removeFromAppointments(Request $request, $id)
                 $appointment->delete();
             }
 
-            return redirect()->back()->with('success', 'Item removed from cart.');
+            return redirect()->back()->with('success', 'Appointment removed successfully.');
 
     }
 
@@ -181,12 +179,20 @@ public function removeFromAppointments(Request $request, $id)
 
     }
 
-    public function showAllUsers()
+    public function showAllUsers(Request $request)
     {
+        // Retrieve all users or relevant data for listing
+
         // Retrieve all appointments or relevant data for listing
+        $query = User::query();
 
-        $users = User::all();
+        // Apply filters
+        if ($request->filled('name')) {
+            $query->where('name', $request->input('name'));
+        }
 
+        // Get filtered appointments
+        $users = $query->get();
 
         return view('admin.allusers', compact('users'));
     }

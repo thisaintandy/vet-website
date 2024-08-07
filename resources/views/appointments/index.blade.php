@@ -2,8 +2,8 @@
 @extends('layouts.navigation')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Your Appointments') }}
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight"><b>
+        {{ __('Appointment History') }}</b>
     </h2>
 @endsection
 
@@ -19,47 +19,51 @@
         </div>
     </div>
 
-    <div class="container mx-auto mt-5 px-6">
-        @if(session('success'))
-            <div class="bg-red-500 text-white p-4 rounded mb-5">
-                {{ session('success') }}
-            </div>
-        @endif
-    </div>
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="mb-5">
-            <a href="" class="bg-green-500 text-white px-4 py-2 rounded">Create New Appointments</a>
+
+        <div class="mb-4 mt-3">
+            <a href="{{ route('book.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded">Create New Appointments</a>
         </div>
+
+        @if(session('success'))
+        <div class="bg-red-500 text-white p-4 rounded mb-5">
+            {{ session('success') }}
+        </div>
+        @endif
 
         @if (count($appointments) > 0)
             @foreach ($appointments as $item)
                 @php
                     $bgColor = match($item->status) {
                         'Approved' => 'bg-green-100',
-                        'Not Approved' => 'bg-pink-100',
-                        'Pending' => 'bg-yellow-100',
+                        'Denied' => 'bg-red-200',
+                        'Pending' => 'bg-gray-400',
                         default => 'bg-white',
                     };
                 @endphp
-
-                <div class="border border-blue-700 p-4 mb-3 rounded-lg flex justify-between items-center {{ $bgColor }}">
-                    <div>
+                <div  class="border mb-3 rounded-lg">
+                    <div class="border p-4 mb-3 rounded-lg flex justify-between items-center {{ $bgColor }}">
                         <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
-                        <p>Appointment Type: {{ $item->appointment_type }}</p>
-                        <p>Pet Name: {{ $item->pet_name }}</p>
-                        <p>Description: {{ $item->description }}</p>
-                        <p>Date: {{ $item->appointment_date }}</p>
-                        <p>Status: <b>{{ $item->status }}</b></p>
                     </div>
-                    <div class="flex flex-col space-y-2">
-                        <a href="{{ route('appointments.edit', ['id' => $item->appointment_id]) }}" class="bg-yellow-500 text-white px-4 py-2 rounded">Edit + </a>
-                        <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
-                        </form>
+                    <div class="p-4 mb-3 rounded-lg flex justify-between items-center">
+                        <div>
+                            <p>Appointment Type: {{ $item->appointment_type }}</p>
+                            <p>Pet Name: {{ $item->pet_name }}</p>
+                        </div>
+                        <div>
+                            <p>Date: {{ $item->appointment_date }}</p>
+                            <p>Status: <b>{{ $item->status }}</b></p>
+                            <p>Description: {{ $item->description }}</p>
+                        </div>
+                        <div class="flex flex-col space-y-2">
+                            <a href="{{ route('appointments.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded">Edit + </a>
+                            <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Remove</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+            </div>
             @endforeach
         @else
             <div>

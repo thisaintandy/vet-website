@@ -136,7 +136,7 @@ class AppointmentController extends Controller
                     $appointment->delete();
                 }
 
-                return redirect()->back()->with('success', 'Item removed from cart.');
+                return redirect()->back()->with('success', 'Appointment removed from the list.');
 
     }
 

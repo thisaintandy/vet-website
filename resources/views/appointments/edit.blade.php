@@ -7,12 +7,12 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto mt-4 px-6">
+    <div class="container mx-auto mt-5 px-6 max-w-7xl  sm:px-6 lg:px-8">
         <p class="mb-2" ><b>Name: </b>{{ $user->name }}</p>
         <p class="mb-2"><strong>Phone Number:</strong> {{ $user->phone_number }}</p>
     </div>
 
-    <div class="container mx-auto mt-2 px-6">
+    <div class="container mx-auto mt-5 px-6 max-w-7xl  sm:px-6 lg:px-8">
         <div class="card-body" style="margin-top: 20px; margin-bottom: 50px">
             <form method="POST" action="{{ route('appointments.update', ['id' => $appointment->appointment_id]) }}">
                 @csrf

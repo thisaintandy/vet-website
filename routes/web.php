@@ -16,6 +16,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    //profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/book-an-appointment', [AppointmentController::class, 'bookAppointment'])->name('book.index');
 
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
-    // Route for adding a product to the cart
+    // Route for adding an appointment
     Route::post('/add-appointments/{id}', [AppointmentController::class, 'addAppointment'])->name('add.appointments');
 
     // Define a route for the form submission
@@ -35,9 +36,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth:admin')->group(function () {
-    //Route::get('/profile', [LoginController::class, 'edit'])->name('admin.auth.edit');
-    //Route::patch('/profile', [LoginController::class, 'update'])->name('admin.auth.update');
-    //Route::delete('/profile', [LoginController::class, 'destroy'])->name('admin.auth.destroy');
+    Route::get('/admin/profile', [LoginController::class, 'edit'])->name('admin.auth.edit');
+    Route::patch('/admin/profile', [LoginController::class, 'update'])->name('admin.auth.update');
+    Route::delete('/admin/profile', [LoginController::class, 'destroy'])->name('admin.auth.destroy');
 
     Route::get('/admin/appointments', [AdminAppointmentController::class, 'index'])->name('admin.index');
 

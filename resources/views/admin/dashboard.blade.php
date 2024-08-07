@@ -7,26 +7,7 @@
 @endsection
 
 <style>
-    .banner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 20px;
-        background-color: #ffffff;
-        background-image: url('background.png'); /* Use the background image for the paws pattern */
-        background-size: cover;
-        position: relative;
-    }
-    .banner::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 50%;
-        background: linear-gradient(to bottom, transparent, pink);
-        z-index: 1;
-    }
+
     .banner-content {
         z-index: 2;
         text-align: left;
@@ -71,9 +52,10 @@
     }
 </style>
 
+
 @section('content')
 <div>
-    <div style="margin-top: 220px; margin-left: 50px; margin-right: 50px; padding-left: 200px; padding-right: 200px;">
+    <div style="margin-top: 150px; margin-left: 25%; margin-right: 50px; padding-right: 200px;">
         <h1 style="font-size: 5rem; font-weight:bold">Helping Paws Clinic</h1>
         <h1 style="font-size: 2rem; font-weight:bold">Always here to help you.</h1>
     </div>
@@ -86,12 +68,12 @@
 
 <!-- Banner at the bottom -->
 <div class="banner">
-    <div class="banner-content" style="padding-left:12%">
+    <div class="banner-content" style="margin-left: 25%; ">
         <h1>Linking your pets to our very best!</h1>
         <p>Get your pet's medical service with our professional veterinarians based in the Philippines.</p>
         <button class="cta-button">24/7 Customer Service</button>
         <p class="cta-subtext">We're here whenever you need us!</p>
     </div>
-    <img src="{{ url('/images/dog.png') }}" alt="Dog" class="mx-auto">
+    <img src="{{ url('/images/dog.png') }}" alt="Dog" class="mx-auto" style="max-width: 100%; max-height: 100vh; height: auto; width: auto">
 </div>
 @endsection

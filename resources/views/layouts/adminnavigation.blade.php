@@ -18,7 +18,7 @@
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
                         <a href="{{ route('admin.dashboard') }}">
-                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                            <img src="{{ url('/images/admindog.png') }}" alt="Dog" class="mx-auto max-w-11">
                         </a>
                     </div>
 
@@ -56,9 +56,7 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('admin.logout') }}">
@@ -71,6 +69,7 @@
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
+
                     </x-dropdown>
                 </div>
 
@@ -105,9 +104,7 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
+
 
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('admin.logout') }}">
