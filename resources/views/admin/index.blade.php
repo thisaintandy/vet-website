@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <div class="py-3">
+    <div class="pt-3" style="margin-top: 7.5%">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 bg-cover bg-center" style="background-image: url('/images/petdoctor.jpg'); height: 100px">

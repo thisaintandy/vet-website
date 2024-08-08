@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="py-3">
+    <div class="py-3" style="margin-top: 7.5%">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 bg-cover bg-center" style="background-image: url('/images/petdoctor.jpg'); height: 100px">
@@ -59,7 +59,7 @@
                             <a href="{{ route('appointments.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded">Edit + </a>
                             <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Remove</button>
+                                <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded" onclick="confirmRemove(event)">Remove</button>
                             </form>
                         </div>
                     </div>
@@ -72,3 +72,5 @@
         @endif
     </div>
 @endsection
+
+

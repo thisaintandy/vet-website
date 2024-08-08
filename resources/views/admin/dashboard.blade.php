@@ -55,7 +55,7 @@
 
 @section('content')
 <div>
-    <div style="margin-top: 150px; margin-left: 25%; margin-right: 50px; padding-right: 200px;">
+    <div style="margin-top: 200px; margin-left: 17%; margin-right: 50px;">
         <h1 style="font-size: 5rem; font-weight:bold">Helping Paws Clinic</h1>
         <h1 style="font-size: 2rem; font-weight:bold">Always here to help you.</h1>
     </div>
@@ -68,7 +68,7 @@
 
 <!-- Banner at the bottom -->
 <div class="banner">
-    <div class="banner-content" style="margin-left: 25%; ">
+    <div class="banner-content" style="margin-left: 17%; margin-right: 50px;">
         <h1>Linking your pets to our very best!</h1>
         <p>Get your pet's medical service with our professional veterinarians based in the Philippines.</p>
         <button class="cta-button">24/7 Customer Service</button>

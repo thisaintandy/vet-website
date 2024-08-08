@@ -1,15 +1,36 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Notification;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Admin\Auth\LoginController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\Auth\AdminAppointmentController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Verifying email by sending email to user
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('welcome');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
+Route::get('user-notify/{id}', [Notification::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -49,7 +70,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/appointments/{id}/edit', [AdminAppointmentController::class, 'edit'])->name('admin.edit');
     Route::patch('/admin/appointments/{id}', [AdminAppointmentController::class, 'update'])->name('admin.update');
 
+
     Route::get('/admin/users', [AdminAppointmentController::class, 'showAllUsers'])->name('admin.allusers');
+    Route::post('/admin/users/remove/{id}', [AdminAppointmentController::class, 'removeUser'])->name('delete.user');
 });
 
 

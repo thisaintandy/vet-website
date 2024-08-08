@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
-
 use App\Models\User;
 use App\Models\Appointments;
 use Illuminate\Http\Request;
@@ -181,8 +180,6 @@ public function removeFromAppointments(Request $request, $id)
 
     public function showAllUsers(Request $request)
     {
-        // Retrieve all users or relevant data for listing
-
         // Retrieve all appointments or relevant data for listing
         $query = User::query();
 
@@ -195,6 +192,16 @@ public function removeFromAppointments(Request $request, $id)
         $users = $query->get();
 
         return view('admin.allusers', compact('users'));
+    }
+
+    public function removeUser(Request $request, $id)
+    {
+        $user = User::where('email', $id)->first();
+
+            if ($user) {
+                $user->delete();
+            }
+            return redirect()->back()->with('success', 'User removed successfully.');
     }
 }
 

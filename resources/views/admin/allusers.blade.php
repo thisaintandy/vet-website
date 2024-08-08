@@ -8,48 +8,60 @@
 
 @section('content')
 
-
-
-    <div class="py-12">
-        <form action="{{ route('admin.allusers') }}" method="GET" class="class="border-gray-300 ml-11" style="margin-left: 20%;"">
-            <div>
-                <div>
-                    <!-- Pet Name Input -->
-                    <input type="text" name="name" class="border border-gray-300 p-2 rounded mt-2 md:mt-0 w-full md:w-1/3 h-12" value="{{ request('name') }}" placeholder="Search Name">
+    <div class="pt-3" style="margin-top: 7.5%">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 bg-cover bg-center" style="background-image: url('/images/petdoctor.jpg'); height: 100px">
+                    <h4 class="text-white"></h4>
+                    <br>
                 </div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 md:mt-0 h-12">Search</button>
             </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
+        <form action="{{ route('admin.allusers') }}" method="GET" class="flex justify-center mb-6">
+            <input type="text" name="name" class="border border-gray-300 p-2 rounded-l-md w-full md:w-1/4 h-12" value="{{ request('name') }}" placeholder="Name">
+            <button type="submit" class="bg-blue-500 text-white px-4 rounded-r-md h-12">Search</button>
         </form>
 
-        <table class="border-gray-300 ml-11" style="margin-left: 20%;">
-            <thead>
-                <tr>
-                    <th class="border-b px-2 py-2 text-left">Name</th>
-                    <th class="border-b px-2 py-2 text-left">Email Address</th>
-                    <th class="border-b px-2 py-2 text-left">Phone Number</th>
-                    <th class="border-b px-2 py-2 text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($users as $user)
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-200">
                     <tr>
-                        <td class="border-b px-2 py-2">{{ $user->name }}</td>
-                        <td class="border-b px-2 py-2">{{ $user->email }}</td>
-                        <td class="border-b px-2 py-2">{{ $user->phone_number }}</td>
-
-                        <td>
-                            <div class="mt-auto flex flex-col space-y-2">
-                            <a href="">Remove</a>
-                            </div>
-                        <td>
-
+                        <th class="text-left py-3 px-4 font-semibold text-sm">Name</th>
+                        <th class="text-left py-3 px-4 font-semibold text-sm">Email Address</th>
+                        <th class="text-left py-3 px-4 font-semibold text-sm">Phone Number</th>
+                        <th class="text-left py-3 px-4 font-semibold text-sm">Actions</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="border-b px-2 py-2 text-center">No users found</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($users as $user)
+                        <tr class="border-t">
+                            <td class="py-3 px-4">{{ $user->name }}</td>
+                            <td class="py-3 px-4">{{ $user->email }}</td>
+                            <td class="py-3 px-4">{{ $user->phone_number }}</td>
+                            <td class="py-3 px-4">
+                                <form action="{{ route('delete.user', ['id' => $user->email]) }}" method="post" onsubmit="return confirmDelete()">
+                                    @csrf
+                                    @method('post')
+                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center py-3 px-4">No users found</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection
+
+<script>
+    function confirmDelete() {
+        return confirm('Are you sure you want to remove this user?');
+    }
+</script>

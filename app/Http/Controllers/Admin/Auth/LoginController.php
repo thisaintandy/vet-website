@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\AdminLoginRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\Auth\AdminLoginRequest;
 
 class LoginController extends Controller
 {
@@ -42,7 +43,7 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/admin/login');
+        return Redirect::to('/');
     }
 
     public function edit(Request $request): View
