@@ -128,9 +128,8 @@ class AppointmentController extends Controller
         return view('appointments.show', compact('appointment', 'user'));
     }
 
-    public function removeFromAppointments(Request $request, $id)
+    public function removeAppointment(Request $request, $id)
         {
-
                 $appointment = Appointments::where('appointment_id', $id)->first();
                 if ($appointment) {
                     $appointment->delete();

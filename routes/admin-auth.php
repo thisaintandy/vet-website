@@ -16,7 +16,7 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
     //admin.dashboard
-    Route::get('/dashboard', function () {
+    Route::get('/admindashboard', function () {
         return view('admin.dashboard');
     })->middleware(['auth', 'verified'])->name('admin.dashboard');
 

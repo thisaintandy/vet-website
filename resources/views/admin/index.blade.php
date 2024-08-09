@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="container mx-auto mt-5 px-6">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
         @if(session('success'))
             <div class="bg-red-500 text-white p-4 rounded mb-5">
                 {{ session('success') }}
@@ -54,39 +54,44 @@
         @if (count($appointments) > 0)
             <div class="flex flex-wrap -mx-10">
                 @foreach ($appointments as $item)
-                    @php
-                        $bgColor = match($item->status) {
-                            'Approved' => 'bg-green-100',
-                            'Denied' => 'bg-pink-100',
-                            'Pending' => 'bg-yellow-100',
-                            default => 'bg-white',
-                        };
-                    @endphp
+                @php
+                    $bgColor = match($item->status) {
+                        'Approved' => 'bg-green-100',
+                        'Denied' => 'bg-pink-100',
+                        'Pending' => 'bg-yellow-100',
+                        default => 'bg-white',
+                    };
+                @endphp
 
-                    <div class="w-full md:w-1/2 xl:w-1/2 p-4">
-                        <div class="border mb-3 rounded-lg">
-                            <div class="border p-4 mb-3 rounded-lg flex justify-between items-center {{ $bgColor }}">
-                                <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
-                                <p>Date: {{ $item->appointment_date }}</p>
+                <div class="w-full md:w-1/2 xl:w-1/2 p-4">
+                    <div class="border mb-3 rounded-lg">
+                        <div class="border p-4 mb-3 rounded-lg flex justify-between items-center {{ $bgColor }}">
+                            <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
+                            <p>Date: {{ $item->appointment_date }}</p>
+                        </div>
+                        <div class="p-4 mb-3 rounded-lg flex justify-between items-center">
+                            <div>
+                                <p>Status: <b>{{ $item->status }}</b></p>
+                                <p>Appointment Type: {{ $item->appointment_type }}</p>
+                                <p>Pet Name: {{ $item->pet_name }}</p>
                             </div>
-                            <div class="p-4 mb-3 rounded-lg flex justify-between items-center">
-                                <div>
-                                    <p>Status: <b>{{ $item->status }}</b></p>
-                                    <p>Appointment Type: {{ $item->appointment_type }}</p>
-                                    <p>Pet Name: {{ $item->pet_name }}</p>
-                                </div>
 
-                                <div class="flex flex-col space-y-2">
-                                    <a href="{{ route('admin.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded text-center">View +</a>
-                                    <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
-                                        @csrf
-                                    </form>
-                                </div>
+                            <div class="flex flex-col space-y-2">
+                                <a href="{{ route('admin.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded text-center">View +</a>
+                                <form action="{{ route('notify.user', ['id' => $item->appointment_id]) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded text-center w-full">Notify</button>
+                                </form>
+                                <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded text-center w-full">Remove</button>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
+            @endforeach
 
-                @endforeach
 
     </div>
         @else

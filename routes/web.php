@@ -36,6 +36,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
 Route::middleware('auth')->group(function () {
     //profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -51,12 +52,14 @@ Route::middleware('auth')->group(function () {
     // Define a route for the form submission
     Route::get('/appointments/{id}', [AppointmentController::class, 'show'])->name('appointments.show');
     Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-    Route::post('/appointments/remove/{id}', [AppointmentController::class, 'removeFromAppointments'])->name('remove.from.appointments');
+    Route::post('/appointments/remove/{id}', [AppointmentController::class, 'removeAppointment'])->name('remove.appointment');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
     Route::patch('/appointments/{id}', [AppointmentController::class, 'update'])->name('appointments.update');
 });
 
 Route::middleware('auth:admin')->group(function () {
+
+
     Route::get('/admin/profile', [LoginController::class, 'edit'])->name('admin.auth.edit');
     Route::patch('/admin/profile', [LoginController::class, 'update'])->name('admin.auth.update');
     Route::delete('/admin/profile', [LoginController::class, 'destroy'])->name('admin.auth.destroy');
@@ -66,13 +69,17 @@ Route::middleware('auth:admin')->group(function () {
     // Define a route for the form submission
     Route::get('/admin/appointments/{id}', [AdminAppointmentController::class, 'show'])->name('admin.show');
     Route::post('/admin/appointments', [AdminAppointmentController::class, 'store'])->name('admin.store');
-    //Route::post('/appointments/remove/{id}', [AdminAppointmentController::class, 'removeFromAppointments'])->name('remove.from.appointments');
+    Route::post('/admin/appointments/remove/{id}', [AdminAppointmentController::class, 'removeFromAppointments'])->name('remove.from.appointments');
     Route::get('/admin/appointments/{id}/edit', [AdminAppointmentController::class, 'edit'])->name('admin.edit');
     Route::patch('/admin/appointments/{id}', [AdminAppointmentController::class, 'update'])->name('admin.update');
 
 
     Route::get('/admin/users', [AdminAppointmentController::class, 'showAllUsers'])->name('admin.allusers');
     Route::post('/admin/users/remove/{id}', [AdminAppointmentController::class, 'removeUser'])->name('delete.user');
+    Route::get('/admin/users/edit/{id}', [AdminAppointmentController::class, 'editUser'])->name('edit.user');
+    Route::patch('/admin/users/{id}/update', [AdminAppointmentController::class, 'updateUser'])->name('update.user');
+
+    Route::post('/admin/notify/{id}', [AdminAppointmentController::class, 'notifyUser'])->name('notify.user');
 });
 
 

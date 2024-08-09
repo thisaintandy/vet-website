@@ -22,7 +22,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
         <form action="{{ route('admin.allusers') }}" method="GET" class="flex justify-center mb-6">
             <input type="text" name="name" class="border border-gray-300 p-2 rounded-l-md w-full md:w-1/4 h-12" value="{{ request('name') }}" placeholder="Name">
-            <button type="submit" class="bg-blue-500 text-white px-4 rounded-r-md h-12">Search</button>
+            <button type="submit" class="bg-gray-600 text-white px-4 rounded-r-md h-12">Search</button>
         </form>
 
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -45,8 +45,10 @@
                                 <form action="{{ route('delete.user', ['id' => $user->email]) }}" method="post" onsubmit="return confirmDelete()">
                                     @csrf
                                     @method('post')
-                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Remove</button>
+                                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Delete </button>
                                 </form>
+
+                                <a href="{{ route('edit.user', ['id' => $user->id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded">Edit + </a>
                             </td>
                         </tr>
                     @empty

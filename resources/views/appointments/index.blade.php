@@ -57,9 +57,9 @@
                         </div>
                         <div class="flex flex-col space-y-2">
                             <a href="{{ route('appointments.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded">Edit + </a>
-                            <form action="{{ route('remove.from.appointments', ['id' => $item->appointment_id]) }}" method="POST">
+                            <form action="{{ route('remove.appointment', ['id' => $item->appointment_id]) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded" onclick="confirmRemove(event)">Remove</button>
+                                <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded text-center w-full">Remove</button>
                             </form>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
             @endforeach
         @else
             <div>
-                <p>No items in cart!</p>
+                <p>No appointment/s requested!</p>
             </div>
         @endif
     </div>

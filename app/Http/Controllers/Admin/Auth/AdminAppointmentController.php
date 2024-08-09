@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Appointments;
 use Illuminate\Http\Request;
+use App\Mail\AppointmentReminder;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentStatusUpdated;
 
 
 class AdminAppointmentController extends Controller
@@ -120,17 +124,17 @@ class AdminAppointmentController extends Controller
 
 
 public function show($id)
-    {
-        // Retrieve the appointment using the custom ID
-        $appointment = Appointments::where('appointment_id', $id)->firstOrFail();
-        $userID = $appointment->user_id;
-        $user = User::where('id', $userID)->first();
+{
+    // Retrieve the appointment using the custom ID
+    $appointment = Appointments::where('appointment_id', $id)->firstOrFail();
+    $userID = $appointment->user_id;
+    $user = User::where('id', $userID)->first();
 
-        //dd($user);
+    // Pass the appointment and user data to the view
+    return view('admin.show', compact('appointment', 'user'))
+        ->with('success', 'Appointment updated successfully, and email notification sent to the user.');
+}
 
-        // Pass the appointment data to the view
-        return view('admin.show', compact('appointment', 'user'));
-    }
 
 
 public function removeFromAppointments(Request $request, $id)
@@ -156,27 +160,37 @@ public function removeFromAppointments(Request $request, $id)
     }
 
     public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'pet_name' => 'required|string|max:255',
-            'appointment_type' => 'required|string|max:255',
-            'appointment_date' => 'required|date',
-            'description' => 'nullable|string',
-            'status' => 'required|string|max:255',
-        ]);
+{
+    // Validate the input data
+    $validatedData = $request->validate([
+        'pet_name' => 'required|string|max:255',
+        'appointment_type' => 'required|string|max:255',
+        'appointment_date' => 'required|date',
+        'description' => 'nullable|string',
+        'status' => 'required|string|max:255',
+    ]);
 
-        $appointment = Appointments::where('appointment_id', $id)->firstOrFail();
-        $appointment->pet_name = $validatedData['pet_name'];
-        $appointment->appointment_type = $validatedData['appointment_type'];
-        $appointment->appointment_date = $validatedData['appointment_date'];
-        $appointment->description = $validatedData['description'];
-        $appointment->status = $validatedData['status'];
-        $appointment->save();
+    // Find the appointment record
+    $appointment = Appointments::where('appointment_id', $id)->firstOrFail();
 
-        return redirect()->route('admin.show', ['id' => $id])
-            ->with('success', 'Appointment updated successfully.');
+    // Update the appointment with validated data
+    $appointment->pet_name = $validatedData['pet_name'];
+    $appointment->appointment_type = $validatedData['appointment_type'];
+    $appointment->appointment_date = $validatedData['appointment_date'];
+    $appointment->description = $validatedData['description'];
+    $appointment->status = $validatedData['status'];
+    $appointment->save();
 
-    }
+    // Get the user associated with this appointment (assuming a relationship exists)
+    $user = $appointment->user;
+
+    // Send an email to the user about the updated appointment status
+    Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $user));
+
+    // Redirect back to the admin show page with a success message
+    return redirect()->route('admin.show', ['id' => $id])
+        ->with('success', 'Appointment updated successfully, and email notification sent to the user.');
+}
 
     public function showAllUsers(Request $request)
     {
@@ -203,6 +217,63 @@ public function removeFromAppointments(Request $request, $id)
             }
             return redirect()->back()->with('success', 'User removed successfully.');
     }
+
+    public function editUser(Request $request, $id)
+    {
+        $user = User::where('id', $id)->firstOrFail();
+
+        // Return the view with the appointment data
+        return view('admin.editUser', compact('user'));
+    }
+
+    public function updateUser(Request $request, $id)
+{
+    $user = User::where('id', $id)->firstOrFail();
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone_number' => 'nullable|string|max:15',
+    ]);
+
+    // Fetch the user by ID
+    $user = User::findOrFail($id);
+
+    // Update user details
+    $user->name = $validatedData['name'];
+    $user->email = $validatedData['email'];
+    $user->phone_number = $validatedData['phone_number'];
+    $user->save();
+
+    return redirect()->route('admin.allusers')
+        ->with('success', 'User updated successfully.');
+}
+
+
+    public function notifyUser($id)
+    {
+        $appointment = Appointments::where('appointment_id', $id)->firstOrFail();
+        $user = $appointment->user;
+
+        if ($user) {
+            // Calculate the remaining days
+            $remainingDays = Carbon::parse($appointment->appointment_date)->diffInDays(Carbon::now(), false);
+
+            // Prevent negative days
+            if ($remainingDays < 0) {
+                $remainingDaysMessage = "The appointment date has passed.";
+            } else {
+                $remainingDaysMessage = "$remainingDays days left until your appointment.";
+            }
+
+            // Send the email
+            Mail::to($user->email)->send(new AppointmentReminder($appointment, $user, $remainingDaysMessage));
+
+            return redirect()->route('admin.index')->with('success', 'Sent a reminder to user about the appointment!');
+        }
+
+        return redirect()->route('admin.index')->with('error', 'User not found.');
+    }
+
 }
 
 
