@@ -1,14 +1,7 @@
-<!-- resources\views\appointments\index.blade.php -->
 @extends('layouts.navigation')
 
-@section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight"><b>
-        {{ __('Appointment History') }}</b>
-    </h2>
-@endsection
-
 @section('content')
-    <div class="py-3" style="margin-top: 7.5%">
+    <div class="py-3" style="margin-top: 4%">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 bg-cover bg-center" style="background-image: url('/images/petdoctor.jpg'); height: 100px">
@@ -20,7 +13,6 @@
     </div>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
         <div class="mb-4 mt-3">
             <a href="{{ route('book.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded">Create New Appointments</a>
         </div>
@@ -35,14 +27,14 @@
             @foreach ($appointments as $item)
                 @php
                     $bgColor = match($item->status) {
-                        'Approved' => 'bg-green-100',
-                        'Denied' => 'bg-red-200',
-                        'Pending' => 'bg-gray-400',
-                        default => 'bg-white',
+                        'Approved' => '#d1e7dd',
+                        'Denied' => '#f8d7da',
+                        'Pending' => '#f0ad4e',
+                        default => '#ffffff',
                     };
                 @endphp
-                <div  class="border mb-3 rounded-lg">
-                    <div class="border p-4 mb-3 rounded-lg flex justify-between items-center {{ $bgColor }}">
+                <div class="border mb-3 rounded-lg">
+                    <div class="border p-4 mb-3 rounded-lg flex justify-between items-center" style="background-color: {{ $bgColor }};">
                         <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
                     </div>
                     <div class="p-4 mb-3 rounded-lg flex justify-between items-center">
@@ -63,7 +55,7 @@
                             </form>
                         </div>
                     </div>
-            </div>
+                </div>
             @endforeach
         @else
             <div>
@@ -71,6 +63,6 @@
             </div>
         @endif
     </div>
+
+
 @endsection
-
-

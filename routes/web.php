@@ -7,6 +7,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Admin\Auth\AdminAppointmentController;
+use App\Http\Controllers\EventController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -83,6 +84,9 @@ Route::middleware('auth:admin')->group(function () {
 });
 
 
+// Route to load the calendar view
+Route::get('/full-calendar-events', [EventController::class, 'index']);
+Route::post('/full-calendar-ajax', [EventController::class, 'ajax']);
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin-auth.php';

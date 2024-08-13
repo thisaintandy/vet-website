@@ -171,7 +171,5 @@ class AppointmentController extends Controller
         return redirect()->route('appointments.show', ['id' => $id])
             ->with('success', 'Appointment updated successfully.');
     }
+
 }
-
-
-

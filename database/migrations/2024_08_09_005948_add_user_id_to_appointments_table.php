@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class AddUserIdToAppointmentsTable extends Migration
 {
-    public function up()
+    /*public function up()
     {
         Schema::table('appointments', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -19,5 +19,5 @@ class AddUserIdToAppointmentsTable extends Migration
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });
-    }
+    }*/
 }
