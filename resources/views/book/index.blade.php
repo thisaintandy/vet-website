@@ -17,7 +17,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
         <div class="mb-4 mt-3">
-            <a href="{{ route('appointments.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded">View Appointments History</a>
+            <a href="{{ url('/full-calendar') }}" class="bg-gray-600 text-white px-4 py-2 rounded">View Appointments History</a>
         </div>
 
         <div class="bg-gray-100 shadow-md rounded-lg p-6 mb-10">
