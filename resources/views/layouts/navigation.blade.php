@@ -39,8 +39,8 @@
                         </x-nav-link>
                     </div>
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.index')">
-                            {{ __('Appointments') }}
+                        <x-nav-link :href="url('/full-calendar')" :active="request()->is('full-calendar')">
+                            {{ __('Calendar') }}
                         </x-nav-link>
                     </div>
                 </div>
@@ -104,8 +104,8 @@
                     </x-responsive-nav-link>
 
 
-                    <x-responsive-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.index')">
-                        {{ __('Appointments') }}
+                    <x-responsive-nav-link :href="url('/full-calendar')" :active="request()->url('/full-calendar')">
+                        {{ __('Calendar') }}
                     </x-responsive-nav-link>
             </div>
 

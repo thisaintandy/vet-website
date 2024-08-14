@@ -83,10 +83,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/notify/{id}', [AdminAppointmentController::class, 'notifyUser'])->name('notify.user');
 });
 
-
-// Route to load the calendar view
-Route::get('/full-calendar-events', [EventController::class, 'index']);
+Route::get('/full-calendar', [EventController::class, 'index']);
+Route::get('/full-calendar-events', [EventController::class, 'getEvents']);
 Route::post('/full-calendar-ajax', [EventController::class, 'ajax']);
+
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin-auth.php';

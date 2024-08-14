@@ -9,11 +9,11 @@
             <!-- Appointments Section -->
             <div class="flex-shrink-0" style="width: 40%; margin-left: 20px; margin-top: 5%;">
                 <div class="mb-4 mt-3">
-                    <a href="{{ route('book.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded">Create New Appointments</a>
+                    <a href="{{ route('book.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded">Create New Appointments</a>
                 </div>
 
                 @if(session('success'))
-                    <div class="bg-red-500 text-white p-4 rounded mb-5">
+                    <div class="bg-red-500 text-white p-4 rounded mb-2">
                         {{ session('success') }}
                     </div>
                 @endif
@@ -28,27 +28,28 @@
                                 default => '#f0ad4e',
                             };
                         @endphp
-                        <div class="border mb-3 rounded-lg">
-                            <div class="border p-4 mb-3 rounded-lg flex justify-between items-center" style="background-color: {{ $bgColor }};">
-                                <p class="font-semibold">Appointment ID: {{ $item->appointment_id }}</p>
-                                <p>Date: {{ $item->appointment_date }}</p>
+                        <div class="border border-gray-300 mb-4 rounded-lg shadow-md">
+                            <div class="bg-gray-100 p-4 rounded-t-lg flex justify-between items-center" style="background-color: {{ $bgColor }};">
+                                <p class="font-semibold text-lg">Appointment ID: {{ $item->appointment_id }}</p>
+                                <p class="text-sm text-gray-600">Date: {{ $item->appointment_date }}</p>
                             </div>
-                            <div class="p-4 mb-3 rounded-lg flex justify-between items-center">
-                                <div>
-                                    <p>Pet Name: {{ $item->pet_name }}</p>
+                            <div class="p-4">
+                                <div class="mb-2">
+                                    <p class="text-md font-medium">Pet Name: <span class="font-normal">{{ $item->pet_name }}</span></p>
+                                    <p class="text-md font-medium">Status: <span class="font-bold text-{{ $item->status == 'Approved' ? 'green' : ($item->status == 'Denied' ? 'red' : 'orange') }}-600">{{ $item->status }}</span></p>
                                 </div>
-                                <div>
-                                    <p>Status: <b>{{ $item->status }}</b></p>
-                                </div>
-                                <div class="flex flex-col space-y-2">
-                                    <a href="{{ route('appointments.edit', ['id' => $item->appointment_id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded">Edit +</a>
-                                    <form action="{{ route('remove.appointment', ['id' => $item->appointment_id]) }}" method="POST">
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('appointments.edit', ['id' => $item->appointment_id]) }}" class="bg-blue-600 text-white px-4 py-2 rounded text-center hover:bg-blue-700 transition duration-200 w-24">Edit</a>
+                                    <form action="{{ route('remove.appointment', ['id' => $item->appointment_id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this appointment?');">
                                         @csrf
-                                        <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded text-center w-full">Remove</button>
+                                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded text-center hover:bg-red-700 transition duration-200 w-24">Remove</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
+
+
+
                     @endforeach
                 @else
                     <div>
@@ -79,8 +80,14 @@
                                 <input type="text" class="form-control" id="pet_name" placeholder="Enter pet name" required>
                             </div>
                             <div class="form-group">
-                                <label for="appointment_type">Appointment Type</label>
-                                <input type="text" class="form-control" id="appointment_type" placeholder="Enter appointment type" required>
+                                <label for="appointment_type">Appointment Type</label><br>
+                                <select class="w-1/3 p-2 border border-gray-300 rounded-lg" name="appointment_type" id="appointment_type" required>
+                                    <option value="" disabled selected>Select type</option>
+                                    <option value="checkup">Check-Up</option>
+                                    <option value="grooming">Grooming</option>
+                                    <option value="vaccination">Vaccination</option>
+                                    <option value="emergency">Emergency</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
@@ -98,17 +105,18 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
+<script>
+    $(document).ready(function() {
     var SITEURL = "{{ url('/') }}";
 
     $.ajaxSetup({
@@ -116,20 +124,6 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    function fetchEvents() {
-        $.ajax({
-            url: SITEURL + '/full-calendar-events',
-            type: 'GET',
-            success: function(events) {
-                $('#calendar').fullCalendar('removeEvents');
-                $('#calendar').fullCalendar('addEventSource', events);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching events:', xhr.responseText);
-            }
-        });
-    }
 
     $('#calendar').fullCalendar({
         editable: true,
@@ -139,16 +133,25 @@
             right: 'month,agendaWeek,agendaDay'
         },
         events: function(start, end, timezone, callback) {
-            fetchEvents(); // Fetch events initially
+            $.ajax({
+                url: SITEURL + '/full-calendar-events',
+                type: 'GET',
+                success: function(events) {
+                    callback(events);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching events:', xhr.responseText);
+                }
+            });
         },
         selectable: true,
         selectHelper: true,
-        select: function (start, end) {
+        select: function(start, end) {
             $('#start').val($.fullCalendar.formatDate(start, "Y-MM-DD"));
             $('#end').val($.fullCalendar.formatDate(end, "Y-MM-DD"));
             $('#appointmentModal').modal('show');
         },
-        eventDrop: function (event) {
+        eventDrop: function(event) {
             var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD");
             var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD");
 
@@ -162,18 +165,17 @@
                     type: 'update'
                 },
                 type: "POST",
-                success: function () {
+                success: function() {
                     displayMessage("Event Updated Successfully");
-                    fetchEvents(); // Refresh events after update
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error updating event:', xhr.responseText);
                 }
             });
         }
     });
 
-    $('#saveAppointment').on('click', function () {
+    $('#saveAppointment').on('click', function() {
         var title = $('#title').val();
         var pet_name = $('#pet_name').val();
         var appointment_type = $('#appointment_type').val();
@@ -181,39 +183,33 @@
         var start = $('#start').val() + 'T00:00:00';
         var end = $('#end').val() + 'T23:59:59';
 
-        if (title) {
-            $.ajax({
-                url: SITEURL + "/full-calendar-ajax",
-                data: {
-                    title: title,
-                    pet_name: pet_name,
-                    appointment_type: appointment_type,
-                    description: description,
-                    start: start,
-                    end: end,
-                    type: 'add'
-                },
-                type: "POST",
-                success: function (data) {
-                    console.log('Success:', data);
-                    displayMessage("Event Created Successfully");
-
-                    $('#appointmentModal').modal('hide');
-                    $('#calendar').fullCalendar('unselect');
-
-                    fetchEvents(); // Refresh events after saving
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error creating event:', xhr.responseText);
-                }
-            });
-        }
+        $.ajax({
+            url: SITEURL + "/full-calendar-ajax",
+            data: {
+                title: title,
+                pet_name: pet_name,
+                appointment_type: appointment_type,
+                description: description,
+                start: start,
+                end: end,
+                type: 'add'
+            },
+            type: "POST",
+            success: function(data) {
+                console.log('Success:', data);
+                displayMessage("Event Created Successfully");
+                $('#appointmentModal').modal('hide');
+                $('#calendar').fullCalendar('refetchEvents'); // Refresh events to include the new appointment
+            },
+            error: function(xhr, status, error) {
+                console.error('Error creating event:', xhr.responseText);
+            }
+        });
     });
 
     function displayMessage(message) {
         toastr.success(message, 'Event');
     }
 });
-
-    </script>
+</script>
 @endsection
